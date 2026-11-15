@@ -1,0 +1,39 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Settings(BaseSettings):
+    DATABASE_URL: str
+    SECRET_KEY: str
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
+    # SMTP Email settings
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    EMAILS_FROM: str = "noreply@fleetflow.com"
+    EMAILS_FROM_NAME: str = "FleetFlow Admin"
+
+    # HTTP Email APIs (Work on cloud hosts like Render where SMTP ports are blocked)
+    RESEND_API_KEY: str = ""
+    RESEND_FROM: str = "FleetFlow <onboarding@resend.dev>"
+    BREVO_API_KEY: str = ""
+
+    # Security & Administration
+    ADMIN_SECRET_KEY: str = "FLEETFLOW_ADMIN_2026"
+    ENVIRONMENT: str = "development"
+    SEED_DEMO_DATA: bool = True
+    CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000,http://127.0.0.1:5173,http://localhost:8000"
+
+    # Redis (optional)
+    REDIS_URL: str = "redis://localhost:6379"
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
+
+
+settings = Settings()

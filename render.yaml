@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: fleetflow-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.4
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fleetflow-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 60
+      - key: ADMIN_SECRET_KEY
+        value: FLEETFLOW_ADMIN_2026
+      - key: ENVIRONMENT
+        value: production
+      - key: SEED_DEMO_DATA
+        value: "false"
+      - key: CORS_ORIGINS
+        value: "*"
+
+databases:
+  - name: fleetflow-db
+    plan: free
+    databaseName: fleetflow_db
+    user: fleetflow
